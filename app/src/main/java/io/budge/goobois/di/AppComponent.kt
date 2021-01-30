@@ -3,7 +3,7 @@ package io.budge.goobois.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import io.budge.goobois.MainActivity
+import io.budge.goobois.main.MainActivity
 import javax.inject.Singleton
 
 @Singleton

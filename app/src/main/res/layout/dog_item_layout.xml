@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="Dog"
+            type="io.budge.goobois.data.model.Dog" />
+    </data>
+
+    <ImageView
+        android:id="@+id/dog_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/doggo" />
+
+
+</layout>
