@@ -2,45 +2,41 @@ package io.budge.goobois.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.budge.goobois.R
 import io.budge.goobois.data.model.Dog
 import io.budge.goobois.databinding.DogItemLayoutBinding
 
-class DogsListAdapter: ListAdapter<Dog, DogsListAdapter.DogsViewHolder>(DogsListDiffUCallback()) {
+class DogsListAdapter: ListAdapter<Dog, DogsListAdapter.DogsViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogsViewHolder =
-        DogsViewHolder.from(parent)
+        DogsViewHolder(DogItemLayoutBinding.bind(parent.inflate(R.layout.dog_item_layout)))
 
-    override fun onBindViewHolder(holder: DogsViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: DogsViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
 
-    class DogsViewHolder private constructor(private val binding: DogItemLayoutBinding) :
+    companion object  DiffCallback : DiffUtil.ItemCallback<Dog>() {
+
+        override fun areItemsTheSame(oldItem: Dog, newItem: Dog): Boolean =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Dog, newItem: Dog): Boolean =
+            oldItem == newItem
+    }
+
+    inner class DogsViewHolder (private val binding: DogItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: Dog) {
             binding.dog = item
             binding.executePendingBindings()
         }
-
-        companion object {
-            fun from(parent: ViewGroup): DogsViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = DogItemLayoutBinding.inflate(layoutInflater, parent, false)
-                return DogsViewHolder(binding)
-            }
-        }
     }
 }
 
-class DogsListDiffUCallback: DiffUtil.ItemCallback<Dog>() {
-    override fun areItemsTheSame(oldItem: Dog, newItem: Dog): Boolean {
-        return oldItem.id == newItem.id
-
-    }
-
-    override fun areContentsTheSame(oldItem: Dog, newItem: Dog): Boolean {
-        return oldItem == newItem
-    }
+inline fun <reified T> ViewGroup.inflate(@LayoutRes layoutRes: Int): T {
+    return LayoutInflater.from(context).inflate(layoutRes, this, false) as T
 }

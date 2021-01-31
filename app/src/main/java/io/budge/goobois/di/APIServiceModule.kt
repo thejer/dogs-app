@@ -44,14 +44,7 @@ class APIServiceModule {
     @Singleton
     fun provideGenericOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor {
-                return@addInterceptor it.proceed(
-                    it.request()
-                        .newBuilder()
-                        .addHeader("x-api-key", "cda64ccb-a99d-4a2d-b2df-3eafe6d436c1")
-                        .build()
-                )
-            }.addInterceptor(interceptor)
+            .addInterceptor(interceptor)
             .build()
 
     @Provides

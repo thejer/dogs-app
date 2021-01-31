@@ -14,7 +14,7 @@ interface DogsApiService {
     @GET("/v1/images/search")
     suspend fun getDogs(
         @Query("limit") limit: Int,
-        @Query("breed_id") breedId: Int
-    ): Response<Dog>
+        @Query("breed_id") breedId: Int,
+    ): Response<MutableList<Dog>>
 
 }

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import io.budge.goobois.App
 import io.budge.goobois.R
 import io.budge.goobois.data.model.DogBreed
@@ -28,22 +28,33 @@ class MainActivity : AppCompatActivity() {
         (applicationContext as App).component.inject(this)
         mainViewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
         binding.lifecycleOwner = this
+
         mainViewModel.getDogBreeds()
+        val dogsAdapter = DogsListAdapter()
+
+        binding.dogsRecyclerview.adapter = dogsAdapter
 
         mainViewModel.dogBreeds.observe(this, {
             it?.let {
                 setUpBreedsSpinner(it)
             }
         })
-        val dogsAdapter = DogsListAdapter()
-        val manager = GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
-        binding.dogsRecyclerview.apply {
-            adapter = dogsAdapter
-            layoutManager = manager
-        }
+
+        mainViewModel.dogs.observe(this, {
+            it?.let {
+                dogsAdapter.submitList(it)
+            }
+        })
+
+        mainViewModel.errorMessage.observe(this, {
+            it?.let {
+                showSnackbar(it, binding.root)
+            }
+        })
     }
 
     private fun setUpBreedsSpinner(dogBreeds: MutableList<DogBreed>) {
@@ -62,11 +73,17 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                val dogBreed = parent.selectedItem
-
+                mainViewModel.getDogByBreed(dogBreeds[position].id)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
+
+
+    private fun showSnackbar(snackbarText: String, view: View) {
+        Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).run {
+            show()
+        }
+    }
+
 }
