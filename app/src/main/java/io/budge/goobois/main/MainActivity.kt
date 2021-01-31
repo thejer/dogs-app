@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                mainViewModel.getDogByBreed(dogBreeds[position].id)
+                mainViewModel.getDogsByBreed(dogBreeds[position].id)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -81,7 +81,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showSnackbar(snackbarText: String, view: View) {
-        Snackbar.make(view, snackbarText, Snackbar.LENGTH_SHORT).run {
+        Snackbar.make(view, snackbarText, Snackbar.LENGTH_INDEFINITE).run {
+            setAction(getString(R.string.retry)) { mainViewModel.getDogBreeds() }
             show()
         }
     }

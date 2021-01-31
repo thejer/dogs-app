@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.budge.goobois.data.api.DogsRepository
+import io.budge.goobois.data.api.IDogsRepository
 import io.budge.goobois.data.model.Dog
 import io.budge.goobois.data.model.DogBreed
 import io.budge.goobois.utils.Result
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val dogsRepository: DogsRepository
+    private val dogsRepository: IDogsRepository
 ): ViewModel() {
 
     private val _dogBreeds = MutableLiveData<MutableList<DogBreed>>()
@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-  fun getDogByBreed(breedId: Int){
+  fun getDogsByBreed(breedId: Int){
         _isLoading.value = true
         viewModelScope.launch {
             when (val result = dogsRepository.getDogs(breedId)) {

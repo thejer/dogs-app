@@ -8,21 +8,21 @@ import io.budge.goobois.utils.Result
 import io.budge.goobois.utils.getAPIResult
 import javax.inject.Inject
 
-class DogsRepository @Inject constructor(private val apiService: DogsApiService) {
+class DogsRepository @Inject constructor(private val apiService: DogsApiService) : IDogsRepository {
 
-    suspend fun getBreeds(): Result<MutableList<DogBreed>>{
+    override suspend fun getBreeds(): Result<MutableList<DogBreed>>{
         return try {
             getAPIResult(apiService.getDogBreeds())
         } catch (e: Exception) {
-            Result.Error(GENERIC_ERROR_CODE, e.localizedMessage?: GENERIC_ERROR_MESSAGE)
+            Result.Error(GENERIC_ERROR_CODE, GENERIC_ERROR_MESSAGE)
         }
     }
 
-    suspend fun getDogs(breedId: Int): Result<MutableList<Dog>> {
+    override suspend fun getDogs(breedId: Int): Result<MutableList<Dog>> {
         return try {
             getAPIResult(apiService.getDogs(100, breedId))
         } catch (e: Exception) {
-            Result.Error(GENERIC_ERROR_CODE, e.localizedMessage?: GENERIC_ERROR_MESSAGE)
+            Result.Error(GENERIC_ERROR_CODE, GENERIC_ERROR_MESSAGE)
         }
     }
 }
