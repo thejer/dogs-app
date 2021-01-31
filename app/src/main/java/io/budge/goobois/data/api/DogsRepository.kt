@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class DogsRepository @Inject constructor(private val apiService: DogsApiService) : IDogsRepository {
 
-    override suspend fun getBreeds(): Result<MutableList<DogBreed>>{
+    override suspend fun getBreeds(): Result<MutableList<DogBreed>> {
         return try {
             getAPIResult(apiService.getDogBreeds())
         } catch (e: Exception) {
@@ -20,6 +20,8 @@ class DogsRepository @Inject constructor(private val apiService: DogsApiService)
 
     override suspend fun getDogs(breedId: Int): Result<MutableList<Dog>> {
         return try {
+            // Using the specified limit, 102, makes the API return just one dog image,
+            // After investigation I found out that setting the limit as 100 gives a good amount of dog images
             getAPIResult(apiService.getDogs(100, breedId))
         } catch (e: Exception) {
             Result.Error(GENERIC_ERROR_CODE, GENERIC_ERROR_MESSAGE)
