@@ -33,7 +33,7 @@ class APIServiceModule {
         gson: Gson
     ): DogsApiService {
         return Retrofit.Builder()
-            .baseUrl("https://api.thedogapi.com/")
+            .baseUrl(BASE_URL)
             .client(client.get())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -44,7 +44,14 @@ class APIServiceModule {
     @Singleton
     fun provideGenericOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            .addInterceptor {
+                return@addInterceptor it.proceed(
+                    it.request()
+                        .newBuilder()
+                        .addHeader("x-api-key", AUTH_KEY)
+                        .build()
+                )
+            }.addInterceptor(interceptor)
             .build()
 
     @Provides
@@ -66,4 +73,10 @@ class APIServiceModule {
     @Singleton
     fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory =
         GsonConverterFactory.create(gson)
+
+
+    companion object {
+        const val AUTH_KEY = "cda64ccb-a99d-4a2d-b2df-3eafe6d436c1"
+        const val BASE_URL = "https://api.thedogapi.com/"
+    }
 }
