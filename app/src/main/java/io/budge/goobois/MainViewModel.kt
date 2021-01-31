@@ -1,6 +1,0 @@
-package io.budge.goobois
-
-import androidx.lifecycle.ViewModel
-
-class MainViewModel: ViewModel() {
-}

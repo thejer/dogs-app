@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [AppModule::class])
 class APIServiceModule {
 
     @Provides
@@ -33,7 +33,7 @@ class APIServiceModule {
         gson: Gson
     ): DogsApiService {
         return Retrofit.Builder()
-            .baseUrl("https://thedogapi.com/v1")
+            .baseUrl("https://api.thedogapi.com/")
             .client(client.get())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -45,15 +45,7 @@ class APIServiceModule {
     fun provideGenericOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .addInterceptor {
-                return@addInterceptor it.proceed(
-                    it
-                        .request()
-                        .newBuilder()
-                        .addHeader("api_key", "cda64ccb-a99d-4a2d-b2df-3eafe6d436c1")
-                        .build()
-                )
-            }.build()
+            .build()
 
     @Provides
     @Singleton

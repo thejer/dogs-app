@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">goo bois</string>
+    <string name="app_name">Dogs</string>
     <string name="select_a_dog_breed">Select a dog breed</string>
+    <string name="retry">RETRY</string>
 </resources>
